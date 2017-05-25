@@ -36,7 +36,7 @@ rejecting coins the code should accept user input which is not strictly limited
 to the valid coins.
 
 NOTE: An object-oriented temptation here will be to create Coin objects that
-know their values and to use them in the application. Avoid this urge is it is
+know their values and to use them in the application. Avoid this urge as it is
 not reflective of how vending machines work. Instead, use strings, enums,
 constants, or something of that nature to represent coins.
 
