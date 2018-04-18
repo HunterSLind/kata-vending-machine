@@ -13,6 +13,13 @@ namespace Vending_Machine
         public static readonly Tuple<double, double> DIME = new Tuple<double, double>(17.9, 2.3);
         public static readonly Tuple<double, double> QUARTER = new Tuple<double, double>(24.3, 5.7);
 
+        public static readonly Dictionary<Tuple<double, double>, int> COINDICTIONARY = new Dictionary<Tuple<double, double>, int>()
+        {
+            {NICKEL, 5 },
+            {DIME, 10 },
+            {QUARTER, 25 }
+        };
+
 
         /// <summary>
         /// Determines coin validity based on diameter and weight.
@@ -55,10 +62,10 @@ namespace Vending_Machine
         ///// <param name="diameter">Diameter of the coin, in Millimeters</param>
         ///// <param name="weight">Weight of the coin, in Grams</param>
         ///// <returns>A coin value in cents</returns>
-        //public int CheckCoinValue(double diameter, double weight)
-        //{
-
-        //}
+        public int CheckCoinValue(double diameter, double weight)
+        {
+            return -1;
+        }
 
         ///// <summary>
         ///// Gets the amount of change to return to customer.
