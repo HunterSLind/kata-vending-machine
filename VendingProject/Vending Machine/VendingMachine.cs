@@ -22,46 +22,61 @@ namespace Vending_Machine
         /// <returns>T/F for whether the coin is acceptable.</returns>
         public bool CheckCoinToAccept(double diameter, double weight)
         {
-
+            if (NICKEL.Item1 == diameter && NICKEL.Item2 == weight)
+            {
+                return true;
+            }
+            else if (DIME.Item1 == diameter && DIME.Item2 == weight)
+            {
+                return true;
+            }
+            else if (QUARTER.Item1 == diameter && QUARTER.Item2 == weight)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
-        /// <summary>
-        /// Determines what's displayed on the screen
-        /// </summary>
-        /// <returns>A display message for the vending machine.</returns>
-        public string ScreenDisplay()
-        {
+        ///// <summary>
+        ///// Determines what's displayed on the screen
+        ///// </summary>
+        ///// <returns>A display message for the vending machine.</returns>
+        //public string ScreenDisplay()
+        //{
 
-        }
+        //}
 
-        /// <summary>
-        /// Gets the coin value based on diameter and weight of the coin
-        /// </summary>
-        /// <param name="diameter">Diameter of the coin, in Millimeters</param>
-        /// <param name="weight">Weight of the coin, in Grams</param>
-        /// <returns>A coin value in cents</returns>
-        public int CheckCoinValue(double diameter, double weight)
-        {
+        ///// <summary>
+        ///// Gets the coin value based on diameter and weight of the coin
+        ///// </summary>
+        ///// <param name="diameter">Diameter of the coin, in Millimeters</param>
+        ///// <param name="weight">Weight of the coin, in Grams</param>
+        ///// <returns>A coin value in cents</returns>
+        //public int CheckCoinValue(double diameter, double weight)
+        //{
 
-        }
+        //}
 
-        /// <summary>
-        /// Gets the amount of change to return to customer.
-        /// </summary>
-        /// <returns>An amount of change to return.</returns>
-        public int MakeChange()
-        {
+        ///// <summary>
+        ///// Gets the amount of change to return to customer.
+        ///// </summary>
+        ///// <returns>An amount of change to return.</returns>
+        //public int MakeChange()
+        //{
 
-        }
+        //}
 
-        /// <summary>
-        /// Determines whether product is selectable by checking whether it exists, and if it is in stock.
-        /// </summary>
-        /// <param name="ProductCode">Code for the product the customer has requested.</param>
-        /// <returns>T/F for whether the product is valid.</returns>
-        public bool SelectProduct(string ProductCode)
-        {
+        ///// <summary>
+        ///// Determines whether product is selectable by checking whether it exists, and if it is in stock.
+        ///// </summary>
+        ///// <param name="ProductCode">Code for the product the customer has requested.</param>
+        ///// <returns>T/F for whether the product is valid.</returns>
+        //public bool SelectProduct(string ProductCode)
+        //{
 
-        }
+        //}
     }
 }
