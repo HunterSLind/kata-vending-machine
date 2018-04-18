@@ -1,16 +1,26 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Vending_Machine
 {
     public class VendingMachine
     {
         /// <summary>
+        /// The following Tuple values are the diameter and weight of known coins, stored respectively.
+        /// </summary>
+        public static readonly Tuple<double, double> PENNY = new Tuple<double, double>(19, 2.5);
+        public static readonly Tuple<double, double> NICKEL = new Tuple<double, double>(21.2, 5);
+        public static readonly Tuple<double, double> DIME = new Tuple<double, double>(17.9, 2.3);
+        public static readonly Tuple<double, double> QUARTER = new Tuple<double, double>(24.3, 5.7);
+
+
+        /// <summary>
         /// Determines coin validity based on diameter and weight.
         /// </summary>
-        /// <param name="diameter">Diameter of the coin</param>
-        /// <param name="weight">Weight of the coin</param>
-        /// <returns></returns>
-        public bool CheckCoinToAccept(string diameter, string weight)
+        /// <param name="diameter">Diameter of the coin, in Millimeters</param>
+        /// <param name="weight">Weight of the coin, in Grams</param>
+        /// <returns>T/F for whether the coin is acceptable.</returns>
+        public bool CheckCoinToAccept(double diameter, double weight)
         {
 
         }
@@ -27,10 +37,10 @@ namespace Vending_Machine
         /// <summary>
         /// Gets the coin value based on diameter and weight of the coin
         /// </summary>
-        /// <param name="diameter">Diameter of the coin.</param>
-        /// <param name="weight">Weight of the coin.</param>
-        /// <returns></returns>
-        public int CheckCoinValue(string diameter, string weight)
+        /// <param name="diameter">Diameter of the coin, in Millimeters</param>
+        /// <param name="weight">Weight of the coin, in Grams</param>
+        /// <returns>A coin value in cents</returns>
+        public int CheckCoinValue(double diameter, double weight)
         {
 
         }
