@@ -19,19 +19,26 @@ namespace Vending_Machine
             {QUARTER, 25 }
         };
 
-        public static Product COLA = new Product("Cola", 100, 1, 5);
-        public static Product CHIPS = new Product("Chips", 50, 2, 10);
-        public static Product CANDY = new Product("Candy", 65, 3, 1);
+        public static Product COLA = new Product("Cola", 100, 1);
+        public static Product CHIPS = new Product("Chips", 50, 2);
+        public static Product CANDY = new Product("Candy", 65, 3);
 
-        public static Dictionary<int, Product> PRODUCTDICTIONARY = new Dictionary<int, Product>()
+        /// <summary>
+        /// Tracks the stock of a given item.
+        /// </summary>
+        public static Dictionary<int, int> PRODUCTDICTIONARY = new Dictionary<int, int>()
         {
-            {COLA.ID, COLA },
-            {CHIPS.ID, CHIPS },
-            {CANDY.ID, CANDY }
+            {1, 10 },
+            {2, 10 },
+            {3, 10 }
         };
 
-
-
+        /// <summary>
+        /// TODO write some code to track coins that were inserted for purchase 
+        /// (Once purchase is made, we will dump the coins into the Collection)
+        /// </summary>
+        private List<int> INSERTEDCOINLIST = new List<int>();
+        
 
         /// <summary>
         /// Determines coin validity based on diameter and weight.
@@ -96,12 +103,22 @@ namespace Vending_Machine
         {
             if (PRODUCTDICTIONARY.ContainsKey(productid))
             {
-                // add valid change checks
-                return PRODUCTDICTIONARY[productid].DispenseItem();
+                if(PRODUCTDICTIONARY[productid] > 0)
+                {
+                    // TODO add NotEnoughMoney check.
+                    // TODO add UnableToMakeChange check.
+                    PRODUCTDICTIONARY[productid]--;
+                    return true;
+                }
+                else
+                {
+                    // TODO Set out of stock message here.
+                    return false;
+                }
             }
             else
             {
-                // Set an invalid product message here.
+                // TODO Set invalid product message here.
                 return false;
             }
         }
