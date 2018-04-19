@@ -89,5 +89,46 @@ namespace VendingMachineTest
             int CoinValue = thisMachine.CheckCoinValue(25, 0);
             Assert.AreEqual(0, CoinValue);
         }
+
+        [TestMethod]
+        public void SelectProduct_Cola()
+        {
+            bool ValidProduct = thisMachine.SelectProduct(VendingMachine.COLA.ID);
+            Assert.AreEqual(true, ValidProduct);
+        }
+        [TestMethod]
+        public void SelectProduct_Chips()
+        {
+            bool ValidProduct = thisMachine.SelectProduct(VendingMachine.CHIPS.ID);
+            Assert.AreEqual(true, ValidProduct);
+        }
+        [TestMethod]
+        public void SelectProduct_Candy()
+        {
+            bool ValidProduct = thisMachine.SelectProduct(VendingMachine.CANDY.ID);
+            Assert.AreEqual(true, ValidProduct);
+        }
+        [TestMethod]
+        public void SelectProduct_SoldOut()
+        {
+            bool ValidProduct = true;
+            while (ValidProduct == true)
+            {
+                ValidProduct = thisMachine.SelectProduct(VendingMachine.COLA.ID);
+            }
+            Assert.AreEqual(false, ValidProduct);
+        }
+        [TestMethod]
+        public void SelectProduct_NotEnoughMoney()
+        {
+            bool ValidProduct = thisMachine.SelectProduct(VendingMachine.CANDY.ID);
+            Assert.AreEqual(false, ValidProduct);
+        }
+        [TestMethod]
+        public void SelectProduct_UnableToMakeChange()
+        {
+            bool ValidProduct = thisMachine.SelectProduct(VendingMachine.CANDY.ID);
+            Assert.AreEqual(false, ValidProduct);
+        }
     }
 }
