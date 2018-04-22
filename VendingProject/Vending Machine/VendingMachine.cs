@@ -174,31 +174,27 @@ namespace Vending_Machine
 
         private bool ableToMakeChange(int change)
         {
-            // TODO add UnableToMakeChange check.
-            // find how many quarters
-            // find how many dimes
-            // find how many nickels
+            
             Dictionary<int, int> changeDictionary = new Dictionary<int, int>()
                     {
                         {25, 0 },
                         {10, 0 },
                         {5, 0 }
                     };
-
-            // Flawed logic. Might not have enough quarters, but could make up for it in dimes
+            // Start with largest coin, and find out how many of those to dispense, then move to smaller and smaller coins.
             // Item:
             // Key: Value of the coin 
             // Value: Number of coins
             foreach (var item in CoinCollection.OrderByDescending(a => a.Key))
             {
-                while (change > item.Key && changeDictionary[item.Key] < CoinCollection[item.Key])
+                while (change >= item.Key && changeDictionary[item.Key] < CoinCollection[item.Key])
                 {
                     changeDictionary[item.Key] = changeDictionary[item.Key] + 1;
                     change = change - item.Key;
                 }
             }
 
-            if (changeDictionary[25] > CoinCollection[25] || changeDictionary[10] > CoinCollection[10] || changeDictionary[5] > CoinCollection[5])
+            if (changeDictionary[25] > CoinCollection[25] || changeDictionary[10] > CoinCollection[10] || changeDictionary[5] > CoinCollection[5] || change > 0)
             {
                 // TODO Dispense Change
                 return false;
