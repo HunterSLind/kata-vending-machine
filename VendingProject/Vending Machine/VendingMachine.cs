@@ -198,22 +198,6 @@ namespace Vending_Machine
                 }
             }
 
-            //while (change > 25 && changeDictionary[25] <= CoinCollection[25])
-            //{
-            //    changeDictionary[25] = changeDictionary[25] + 1;
-            //    change = change - 25;
-            //}
-            //while (change > 10)
-            //{
-            //    changeDictionary[10] = changeDictionary[10] + 1;
-            //    change = change - 10;
-            //}
-            //while (change > 5)
-            //{
-            //    changeDictionary[5] = changeDictionary[5] + 1;
-            //    change = change - 5;
-            //}
-
             if (changeDictionary[25] > CoinCollection[25] || changeDictionary[10] > CoinCollection[10] || changeDictionary[5] > CoinCollection[5])
             {
                 // TODO Dispense Change
