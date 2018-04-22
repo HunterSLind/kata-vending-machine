@@ -135,47 +135,24 @@ namespace Vending_Machine
             {
                 if (PRODUCTSTOCK[productid] > 0)
                 {
-                    // TODO add NotEnoughMoney check.
                     Product thisProduct = ProductDictionary[productid];
 
+                    // Check if enough money has been inserted for item.
                     if (thisProduct.Price > InsertedAmount)
                     {
                         // Set a not enough money message here.
                         return false;
                     }
 
-                    // TODO add UnableToMakeChange check.
-                    // find how many quarters
-                    // find how many dimes
-                    // find how many nickels
-                    int numQuarters = 0;
-                    int numDimes = 0;
-                    int numNickels = 0;
-
+                    // Set change amount
                     int change = InsertedAmount - thisProduct.Price;
-
-                    while(change > 25)
+                    // Check if vending machine has the coins to make change.
+                    if (!ableToMakeChange(change))
                     {
-                        numQuarters = numQuarters + 1;
-                        change = change - 25;
-                    }
-                    while (change > 10)
-                    {
-                        numDimes = numDimes + 1;
-                        change = change - 10;
-                    }
-                    while (change > 5)
-                    {
-                        numNickels = numNickels + 1;
-                        change = change - 5;
-                    }
-
-                    if(numQuarters > CoinCollection[25] || numDimes > CoinCollection[10] || numNickels > CoinCollection[5])
-                    {
-                        // TODO Unable to make change message
+                        // TODO set unable to make change method here.
                         return false;
                     }
-                    
+
                     // Before returning true, subtract from the inventory level of the product.
                     PRODUCTSTOCK[productid]--;
 
@@ -192,6 +169,44 @@ namespace Vending_Machine
                 // TODO Set invalid product message here.
                 return false;
             }
+        }
+
+        private bool ableToMakeChange(int change)
+        {
+            // TODO add UnableToMakeChange check.
+            // find how many quarters
+            // find how many dimes
+            // find how many nickels
+            Dictionary<int, int> changeDictionary = new Dictionary<int, int>()
+                    {
+                        {25, 0 },
+                        {10, 0 },
+                        {5, 0 }
+                    };
+            
+            // Flawed logic. Might not have enough quarters, but could make up for it in dimes
+            while (change > 25)
+            {
+                changeDictionary[25] = changeDictionary[25] + 1;
+                change = change - 25;
+            }
+            while (change > 10)
+            {
+                changeDictionary[10] = changeDictionary[10] + 1;
+                change = change - 10;
+            }
+            while (change > 5)
+            {
+                changeDictionary[5] = changeDictionary[5] + 1;
+                change = change - 5;
+            }
+
+            if (changeDictionary[25] > CoinCollection[25] || changeDictionary[10] > CoinCollection[10] || changeDictionary[5] > CoinCollection[5])
+            {
+                // TODO Dispense Change
+                return false;
+            }
+            return true;
         }
     }
 }
