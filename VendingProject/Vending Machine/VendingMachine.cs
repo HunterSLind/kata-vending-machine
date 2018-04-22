@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Vending_Machine
 {
@@ -183,23 +184,35 @@ namespace Vending_Machine
                         {10, 0 },
                         {5, 0 }
                     };
-            
+
             // Flawed logic. Might not have enough quarters, but could make up for it in dimes
-            while (change > 25)
+            // Item:
+            // Key: Value of the coin 
+            // Value: Number of coins
+            foreach (var item in CoinCollection.OrderByDescending(a => a.Key))
             {
-                changeDictionary[25] = changeDictionary[25] + 1;
-                change = change - 25;
+                while (change > item.Key && changeDictionary[item.Key] < CoinCollection[item.Key])
+                {
+                    changeDictionary[item.Key] = changeDictionary[item.Key] + 1;
+                    change = change - item.Key;
+                }
             }
-            while (change > 10)
-            {
-                changeDictionary[10] = changeDictionary[10] + 1;
-                change = change - 10;
-            }
-            while (change > 5)
-            {
-                changeDictionary[5] = changeDictionary[5] + 1;
-                change = change - 5;
-            }
+
+            //while (change > 25 && changeDictionary[25] <= CoinCollection[25])
+            //{
+            //    changeDictionary[25] = changeDictionary[25] + 1;
+            //    change = change - 25;
+            //}
+            //while (change > 10)
+            //{
+            //    changeDictionary[10] = changeDictionary[10] + 1;
+            //    change = change - 10;
+            //}
+            //while (change > 5)
+            //{
+            //    changeDictionary[5] = changeDictionary[5] + 1;
+            //    change = change - 5;
+            //}
 
             if (changeDictionary[25] > CoinCollection[25] || changeDictionary[10] > CoinCollection[10] || changeDictionary[5] > CoinCollection[5])
             {

@@ -149,6 +149,42 @@ namespace VendingMachineTest
             Assert.AreEqual(false, ValidProduct);
         }
 
+
+        [TestMethod]
+        public void SelectProduct_Cola_ChangeWithNoQuarters()
+        {
+            // Cola is a dollar
+            for (int i = 0; i < 20; i++)
+            {
+                thisMachine.CheckCoinValue(VendingMachine.DIME.Item1, VendingMachine.DIME.Item2);
+            }
+            bool ValidProduct = thisMachine.SelectProduct(VendingMachine.COLA.ID);
+            Assert.AreEqual(true, ValidProduct);
+        }
+
+        [TestMethod]
+        public void SelectProduct_Chips_ChangeWithNoQuarters()
+        {
+            // Chips price is 50 cents
+            for (int i = 0; i < 20; i++)
+            {
+                thisMachine.CheckCoinValue(VendingMachine.DIME.Item1, VendingMachine.DIME.Item2);
+            }
+            bool ValidProduct = thisMachine.SelectProduct(VendingMachine.CHIPS.ID);
+            Assert.AreEqual(true, ValidProduct);
+        }
+        [TestMethod]
+        public void SelectProduct_Candy_ChangeWithNoQuarters()
+        {
+            // Candy Price is 65 cents
+            for (int i = 0; i < 50; i++)
+            {
+                thisMachine.CheckCoinValue(VendingMachine.NICKEL.Item1, VendingMachine.NICKEL.Item2);
+            }
+            bool ValidProduct = thisMachine.SelectProduct(VendingMachine.CANDY.ID);
+            Assert.AreEqual(true, ValidProduct);
+        }
+
         [TestMethod]
         public void SelectProduct_SoldOut()
         {
