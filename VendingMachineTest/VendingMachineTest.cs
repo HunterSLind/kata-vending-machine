@@ -130,5 +130,44 @@ namespace VendingMachineTest
             bool ValidProduct = thisMachine.SelectProduct(VendingMachine.CANDY.ID);
             Assert.AreEqual(false, ValidProduct);
         }
+
+        [TestMethod]
+        public void CollectCoin_Nickel()
+        {
+            int CoinValue = thisMachine.CheckCoinValue(VendingMachine.NICKEL.Item1, VendingMachine.NICKEL.Item2);
+            Assert.AreEqual(thisMachine.CoinCollection[5], 1);
+        }
+        [TestMethod]
+        public void CollectCoin_Dime()
+        {
+            int CoinValue = thisMachine.CheckCoinValue(VendingMachine.DIME.Item1, VendingMachine.DIME.Item2);
+            Assert.AreEqual(thisMachine.CoinCollection[10], 1);
+        }
+        [TestMethod]
+        public void CollectCoin_Quarter()
+        {
+            int CoinValue = thisMachine.CheckCoinValue(VendingMachine.QUARTER.Item1, VendingMachine.QUARTER.Item2);
+            Assert.AreEqual(thisMachine.CoinCollection[25], 1);
+        }
+
+        [TestMethod]
+        public void UpdateInsertedAmount_Nickel()
+        {
+            int CoinValue = thisMachine.CheckCoinValue(VendingMachine.NICKEL.Item1, VendingMachine.NICKEL.Item2);
+            Assert.AreEqual(thisMachine.InsertedAmount, 5);
+        }
+        [TestMethod]
+        public void UpdateInsertedAmount_Dime()
+        {
+            int CoinValue = thisMachine.CheckCoinValue(VendingMachine.DIME.Item1, VendingMachine.DIME.Item2);
+            Assert.AreEqual(thisMachine.InsertedAmount, 10);
+        }
+        [TestMethod]
+        public void UpdateInsertedAmount_Quarter()
+        {
+            int CoinValue = thisMachine.CheckCoinValue(VendingMachine.QUARTER.Item1, VendingMachine.QUARTER.Item2);
+            Assert.AreEqual(thisMachine.InsertedAmount, 25);
+        }
+
     }
 }

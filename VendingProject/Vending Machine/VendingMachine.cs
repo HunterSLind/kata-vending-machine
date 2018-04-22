@@ -23,6 +23,7 @@ namespace Vending_Machine
         public static Product CHIPS = new Product("Chips", 50, 2);
         public static Product CANDY = new Product("Candy", 65, 3);
 
+
         /// <summary>
         /// Tracks the stock of a given item.
         /// </summary>
@@ -33,11 +34,17 @@ namespace Vending_Machine
             {3, 10 }
         };
 
+        public int InsertedAmount = 0;
+
         /// <summary>
-        /// TODO write some code to track coins that were inserted for purchase 
-        /// (Once purchase is made, we will dump the coins into the Collection)
+        /// Coin storage counts. Key is the value of the coin, Value is the number of coins in the machine.
         /// </summary>
-        private List<int> INSERTEDCOINLIST = new List<int>();
+        public Dictionary<int, int> CoinCollection = new Dictionary<int, int>()
+        {
+            {5, 0 }, //NICKEL
+            {10, 0 }, //DIME
+            {25, 0 } // QUARTER
+        };
         
 
         /// <summary>
@@ -77,7 +84,9 @@ namespace Vending_Machine
         {
             if (COINDICTIONARY.ContainsKey(new Tuple<double, double>(diameter, weight)))
             {
-                return COINDICTIONARY[new Tuple<double, double>(diameter, weight)];
+                int coinValue = COINDICTIONARY[new Tuple<double, double>(diameter, weight)];
+                depositCoin(coinValue);
+                return coinValue;
             }
             else
             {
@@ -85,14 +94,27 @@ namespace Vending_Machine
             }
         }
 
-        ///// <summary>
-        ///// Gets the amount of change to return to customer.
-        ///// </summary>
-        ///// <returns>An amount of change to return.</returns>
-        //public int MakeChange()
-        //{
+        /// <summary>
+        /// Gets the amount of change to return to customer.
+        /// </summary>
+        /// <returns>An amount of change to return.</returns>
+        public int MakeChange()
+        {
+            return 0;
+        }
 
-        //}
+        /// <summary>
+        /// Deposits a coin into the Coin Collection item.
+        /// </summary>
+        /// <param name="Value"></param>
+        private void depositCoin(int Value)
+        {
+            if(CoinCollection.ContainsKey(Value))
+            {
+                CoinCollection[Value]++;
+                InsertedAmount = InsertedAmount + Value;
+            }
+        }
 
         /// <summary>
         /// Determines whether product is selectable by checking whether it exists, and if it is in stock.
