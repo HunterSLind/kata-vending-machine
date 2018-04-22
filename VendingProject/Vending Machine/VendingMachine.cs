@@ -23,16 +23,24 @@ namespace Vending_Machine
         public static Product CHIPS = new Product("Chips", 50, 2);
         public static Product CANDY = new Product("Candy", 65, 3);
 
+        public static Dictionary<int, Product> ProductDictionary = new Dictionary<int, Product>()
+        {
+            {1,  new Product("Cola", 100, 1) },
+            {2, new Product("Chips", 50, 2) },
+            {3, new Product("Candy", 65, 3) }
+        };
+
 
         /// <summary>
         /// Tracks the stock of a given item.
         /// </summary>
-        public static Dictionary<int, int> PRODUCTDICTIONARY = new Dictionary<int, int>()
+        public static Dictionary<int, int> PRODUCTSTOCK = new Dictionary<int, int>()
         {
             {1, 10 },
             {2, 10 },
             {3, 10 }
         };
+
 
         public int InsertedAmount = 0;
 
@@ -45,7 +53,7 @@ namespace Vending_Machine
             {10, 0 }, //DIME
             {25, 0 } // QUARTER
         };
-        
+
 
         /// <summary>
         /// Determines coin validity based on diameter and weight.
@@ -109,7 +117,7 @@ namespace Vending_Machine
         /// <param name="Value"></param>
         private void depositCoin(int Value)
         {
-            if(CoinCollection.ContainsKey(Value))
+            if (CoinCollection.ContainsKey(Value))
             {
                 CoinCollection[Value]++;
                 InsertedAmount = InsertedAmount + Value;
@@ -123,13 +131,54 @@ namespace Vending_Machine
         /// <returns>T/F for whether the product is valid.</returns>
         public bool SelectProduct(int productid)
         {
-            if (PRODUCTDICTIONARY.ContainsKey(productid))
+            if (PRODUCTSTOCK.ContainsKey(productid))
             {
-                if(PRODUCTDICTIONARY[productid] > 0)
+                if (PRODUCTSTOCK[productid] > 0)
                 {
                     // TODO add NotEnoughMoney check.
+                    Product thisProduct = ProductDictionary[productid];
+
+                    if (thisProduct.Price > InsertedAmount)
+                    {
+                        // Set a not enough money message here.
+                        return false;
+                    }
+
                     // TODO add UnableToMakeChange check.
-                    PRODUCTDICTIONARY[productid]--;
+                    // find how many quarters
+                    // find how many dimes
+                    // find how many nickels
+                    int numQuarters = 0;
+                    int numDimes = 0;
+                    int numNickels = 0;
+
+                    int change = InsertedAmount - thisProduct.Price;
+
+                    while(change > 25)
+                    {
+                        numQuarters = numQuarters + 1;
+                        change = change - 25;
+                    }
+                    while (change > 10)
+                    {
+                        numDimes = numDimes + 1;
+                        change = change - 10;
+                    }
+                    while (change > 5)
+                    {
+                        numNickels = numNickels + 1;
+                        change = change - 5;
+                    }
+
+                    if(numQuarters > CoinCollection[25] || numDimes > CoinCollection[10] || numNickels > CoinCollection[5])
+                    {
+                        // TODO Unable to make change message
+                        return false;
+                    }
+                    
+                    // Before returning true, subtract from the inventory level of the product.
+                    PRODUCTSTOCK[productid]--;
+
                     return true;
                 }
                 else
