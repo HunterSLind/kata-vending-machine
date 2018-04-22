@@ -19,6 +19,11 @@ namespace Vending_Machine
             {DIME, 10 },
             {QUARTER, 25 }
         };
+        public static readonly string THANKYOUMESSAGE = "THANK YOU";
+        public static readonly string INSERTCOINMESSAGE = "INSERT COIN";
+        public static readonly string SOLDOUTMESSAGE = "SOLD OUT";
+        public static readonly string EXACTCHANGEONLYMESSAGE = "EXACT CHANGE ONLY";
+
 
         public static Product COLA = new Product("Cola", 100, 1);
         public static Product CHIPS = new Product("Chips", 50, 2);
@@ -31,19 +36,16 @@ namespace Vending_Machine
             {3, new Product("Candy", 65, 3) }
         };
 
-
         /// <summary>
         /// Tracks the stock of a given item.
         /// </summary>
-        public static Dictionary<int, int> PRODUCTSTOCK = new Dictionary<int, int>()
+        public Dictionary<int, int> PRODUCTSTOCK = new Dictionary<int, int>()
         {
             {1, 10 },
             {2, 10 },
             {3, 10 }
         };
 
-
-        public int InsertedAmount = 0;
 
         /// <summary>
         /// Coin storage counts. Key is the value of the coin, Value is the number of coins in the machine.
@@ -55,6 +57,8 @@ namespace Vending_Machine
             {25, 0 } // QUARTER
         };
 
+        public int InsertedAmount = 0;
+        private string screenMessage;
 
         /// <summary>
         /// Determines coin validity based on diameter and weight.
@@ -78,10 +82,10 @@ namespace Vending_Machine
         ///// Determines what's displayed on the screen
         ///// </summary>
         ///// <returns>A display message for the vending machine.</returns>
-        //public string ScreenDisplay()
-        //{
-
-        //}
+        public string ScreenDisplay()
+        {
+            return screenMessage;
+        }
 
         /// <summary>
         /// Gets the coin value based on diameter and weight of the coin
@@ -132,49 +136,40 @@ namespace Vending_Machine
         /// <returns>T/F for whether the product is valid.</returns>
         public bool SelectProduct(int productid)
         {
-            if (PRODUCTSTOCK.ContainsKey(productid))
+            if (PRODUCTSTOCK[productid] > 0)
             {
-                if (PRODUCTSTOCK[productid] > 0)
+                Product thisProduct = ProductDictionary[productid];
+
+                // Check if enough money has been inserted for item.
+                if (thisProduct.Price > InsertedAmount)
                 {
-                    Product thisProduct = ProductDictionary[productid];
-
-                    // Check if enough money has been inserted for item.
-                    if (thisProduct.Price > InsertedAmount)
-                    {
-                        // Set a not enough money message here.
-                        return false;
-                    }
-
-                    // Set change amount
-                    int change = InsertedAmount - thisProduct.Price;
-                    // Check if vending machine has the coins to make change.
-                    if (!ableToMakeChange(change))
-                    {
-                        // TODO set unable to make change method here.
-                        return false;
-                    }
-
-                    // Before returning true, subtract from the inventory level of the product.
-                    PRODUCTSTOCK[productid]--;
-
-                    return true;
-                }
-                else
-                {
-                    // TODO Set out of stock message here.
+                    screenMessage = INSERTCOINMESSAGE;
                     return false;
                 }
+
+                // Set change amount
+                int change = InsertedAmount - thisProduct.Price;
+                // Check if vending machine has the coins to make change.
+                if (!ableToMakeChange(change))
+                {
+                    screenMessage = EXACTCHANGEONLYMESSAGE;
+                    return false;
+                }
+
+                // Before returning true, subtract from the inventory level of the product.
+                PRODUCTSTOCK[productid]--;
+                screenMessage = THANKYOUMESSAGE;
+                return true;
             }
             else
             {
-                // TODO Set invalid product message here.
+                screenMessage = SOLDOUTMESSAGE;
                 return false;
             }
         }
 
         private bool ableToMakeChange(int change)
         {
-            
             Dictionary<int, int> changeDictionary = new Dictionary<int, int>()
                     {
                         {25, 0 },
