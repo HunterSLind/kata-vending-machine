@@ -24,8 +24,6 @@ namespace Vending_Machine
         public static readonly string SOLDOUTMESSAGE = "SOLD OUT";
         public static readonly string EXACTCHANGEONLYMESSAGE = "EXACT CHANGE ONLY";
         
-
-
         private Dictionary<int, Product> productDictionary = new Dictionary<int, Product>();
 
         /// <summary>
@@ -104,16 +102,7 @@ namespace Vending_Machine
                 return 0;
             }
         }
-
-        /// <summary>
-        /// Gets the amount of change to return to customer.
-        /// </summary>
-        /// <returns>An amount of change to return.</returns>
-        public int MakeChange()
-        {
-            return 0;
-        }
-
+        
         /// <summary>
         /// Deposits a coin into the Coin Collection item.
         /// </summary>
