@@ -23,14 +23,13 @@ namespace Vending_Machine
         public static readonly string INSERTCOINMESSAGE = "INSERT COIN";
         public static readonly string SOLDOUTMESSAGE = "SOLD OUT";
         public static readonly string EXACTCHANGEONLYMESSAGE = "EXACT CHANGE ONLY";
-        
+
         private Dictionary<int, Product> productDictionary = new Dictionary<int, Product>();
 
         /// <summary>
         /// Tracks the stock of a given item.
         /// </summary>
         private Dictionary<int, int> productStock = new Dictionary<int, int>();
-
 
         /// <summary>
         /// Coin storage counts. Key is the value of the coin, Value is the number of coins in the machine.
@@ -42,17 +41,24 @@ namespace Vending_Machine
             {25, 0 } // QUARTER
         };
 
+        public Dictionary<int, int> changeDictionary = new Dictionary<int, int>()
+        {
+            {25, 0 },
+            {10, 0 },
+            {5, 0 }
+        };
+
         public int InsertedAmount = 0;
         private string screenMessage;
 
         public VendingMachine(Dictionary<int, Product> newProductDictionary, Dictionary<int, int> newProductStockDictionary)
         {
             productDictionary = newProductDictionary;
-            
+
             if (newProductStockDictionary == null || newProductStockDictionary.Count == 0)
             {
                 productStock = new Dictionary<int, int>();
-                foreach(var product in productDictionary)
+                foreach (var product in productDictionary)
                 {
                     productStock.Add(product.Key, 0);
                 }
@@ -102,7 +108,7 @@ namespace Vending_Machine
                 return 0;
             }
         }
-        
+
         /// <summary>
         /// Deposits a coin into the Coin Collection item.
         /// </summary>
@@ -155,14 +161,19 @@ namespace Vending_Machine
             }
         }
 
+        public void EmptyChangeDictionary()
+        {
+            changeDictionary = new Dictionary<int, int>()
+            {
+                {25, 0 },
+                {10, 0 },
+                {5, 0 }
+            };
+        }
+
         private bool ableToMakeChange(int change)
         {
-            Dictionary<int, int> changeDictionary = new Dictionary<int, int>()
-                    {
-                        {25, 0 },
-                        {10, 0 },
-                        {5, 0 }
-                    };
+
             // Start with largest coin, and find out how many of those to dispense, then move to smaller and smaller coins.
             // Item:
             // Key: Value of the coin 
