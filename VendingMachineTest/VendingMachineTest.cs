@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Vending_Machine;
@@ -11,12 +12,28 @@ namespace VendingMachineTest
     {
         VendingMachine thisMachine;
 
-
+        public static Product COLA = new Product("Cola", 100, 1);
+        public static Product CHIPS = new Product("Chips", 50, 2);
+        public static Product CANDY = new Product("Candy", 65, 3);
 
         [TestInitialize]
         public void testInit()
         {
-            thisMachine = new VendingMachine();
+            Dictionary<int, Product> testProdDictionary = new Dictionary<int, Product>()
+            {
+                {1,  new Product("Cola", 100, 1) },
+                {2, new Product("Chips", 50, 2) },
+                {3, new Product("Candy", 65, 3) }
+             };
+
+            Dictionary<int, int> testProdStockDictionary = new Dictionary<int, int>()
+            {
+                {1, 10 },
+                {2, 10 },
+                {3, 10 }
+            };
+
+            thisMachine = new VendingMachine(testProdDictionary, testProdStockDictionary);
         }
 
         ///////////////////////////////////////////
@@ -26,31 +43,31 @@ namespace VendingMachineTest
         public void CheckCoinToAccept_Penny()
         {
             bool IsValidCoin = thisMachine.CheckCoinToAccept(VendingMachine.PENNY.Item1, VendingMachine.PENNY.Item2);
-            Assert.AreEqual(IsValidCoin, false);
+            Assert.IsFalse(IsValidCoin);
         }
         [TestMethod]
         public void CheckCoinToAccept_Nickel()
         {
             bool IsValidCoin = thisMachine.CheckCoinToAccept(VendingMachine.NICKEL.Item1, VendingMachine.NICKEL.Item2);
-            Assert.AreEqual(IsValidCoin, true);
+            Assert.IsTrue(IsValidCoin);
         }
         [TestMethod]
         public void CheckCoinToAccept_Dime()
         {
             bool IsValidCoin = thisMachine.CheckCoinToAccept(VendingMachine.DIME.Item1, VendingMachine.DIME.Item2);
-            Assert.AreEqual(IsValidCoin, true);
+            Assert.IsTrue(IsValidCoin);
         }
         [TestMethod]
         public void CheckCoinToAccept_Quarter()
         {
             bool IsValidCoin = thisMachine.CheckCoinToAccept(VendingMachine.QUARTER.Item1, VendingMachine.QUARTER.Item2);
-            Assert.AreEqual(IsValidCoin, true);
+            Assert.IsTrue(IsValidCoin);
         }
         [TestMethod]
         public void CheckCoinToAccept_InvalidCoin()
         {
             bool IsValidCoin = thisMachine.CheckCoinToAccept(25, 0);
-            Assert.AreEqual(IsValidCoin, false);
+            Assert.IsFalse(IsValidCoin);
         }
 
         //////////////////////////////////
@@ -142,8 +159,8 @@ namespace VendingMachineTest
             thisMachine.CheckCoinValue(VendingMachine.QUARTER.Item1, VendingMachine.QUARTER.Item2);
             thisMachine.CheckCoinValue(VendingMachine.QUARTER.Item1, VendingMachine.QUARTER.Item2);
             thisMachine.CheckCoinValue(VendingMachine.QUARTER.Item1, VendingMachine.QUARTER.Item2);
-            bool ValidProduct = thisMachine.SelectProduct(VendingMachine.COLA.ID);
-            Assert.AreEqual(true, ValidProduct);
+            bool ValidProduct = thisMachine.SelectProduct(COLA.ID);
+            Assert.IsTrue(ValidProduct);
         }
         [TestMethod]
         public void SelectProduct_Chips_ExactAmount()
@@ -151,8 +168,8 @@ namespace VendingMachineTest
             // Chips price is 50 cents
             thisMachine.CheckCoinValue(VendingMachine.QUARTER.Item1, VendingMachine.QUARTER.Item2);
             thisMachine.CheckCoinValue(VendingMachine.QUARTER.Item1, VendingMachine.QUARTER.Item2);
-            bool ValidProduct = thisMachine.SelectProduct(VendingMachine.CHIPS.ID);
-            Assert.AreEqual(true, ValidProduct);
+            bool ValidProduct = thisMachine.SelectProduct(CHIPS.ID);
+            Assert.IsTrue(ValidProduct);
         }
         [TestMethod]
         public void SelectProduct_Candy_ExactAmount()
@@ -162,32 +179,32 @@ namespace VendingMachineTest
             thisMachine.CheckCoinValue(VendingMachine.QUARTER.Item1, VendingMachine.QUARTER.Item2);
             thisMachine.CheckCoinValue(VendingMachine.DIME.Item1, VendingMachine.DIME.Item2);
             thisMachine.CheckCoinValue(VendingMachine.NICKEL.Item1, VendingMachine.NICKEL.Item2);
-            bool ValidProduct = thisMachine.SelectProduct(VendingMachine.CANDY.ID);
-            Assert.AreEqual(true, ValidProduct);
+            bool ValidProduct = thisMachine.SelectProduct(CANDY.ID);
+            Assert.IsTrue(ValidProduct);
         }
         [TestMethod]
         public void SelectProduct_Cola_NotEnoughChange()
         {
             // Cola is a dollar
             thisMachine.CheckCoinValue(VendingMachine.QUARTER.Item1, VendingMachine.QUARTER.Item2);
-            bool ValidProduct = thisMachine.SelectProduct(VendingMachine.COLA.ID);
-            Assert.AreEqual(false, ValidProduct);
+            bool ValidProduct = thisMachine.SelectProduct(COLA.ID);
+            Assert.IsFalse(ValidProduct);
         }
         [TestMethod]
         public void SelectProduct_Chips_NotEnoughChange()
         {
             // Chips price is 50 cents
             thisMachine.CheckCoinValue(VendingMachine.QUARTER.Item1, VendingMachine.QUARTER.Item2);
-            bool ValidProduct = thisMachine.SelectProduct(VendingMachine.CHIPS.ID);
-            Assert.AreEqual(false, ValidProduct);
+            bool ValidProduct = thisMachine.SelectProduct(CHIPS.ID);
+            Assert.IsFalse(ValidProduct);
         }
         [TestMethod]
         public void SelectProduct_Candy_NotEnoughChange()
         {
             // Candy Price is 65 cents
             thisMachine.CheckCoinValue(VendingMachine.NICKEL.Item1, VendingMachine.NICKEL.Item2);
-            bool ValidProduct = thisMachine.SelectProduct(VendingMachine.CANDY.ID);
-            Assert.AreEqual(false, ValidProduct);
+            bool ValidProduct = thisMachine.SelectProduct(CANDY.ID);
+            Assert.IsFalse(ValidProduct);
         }
         [TestMethod]
         public void SelectProduct_Cola_ChangeWithNoQuarters()
@@ -197,8 +214,8 @@ namespace VendingMachineTest
             {
                 thisMachine.CheckCoinValue(VendingMachine.DIME.Item1, VendingMachine.DIME.Item2);
             }
-            bool ValidProduct = thisMachine.SelectProduct(VendingMachine.COLA.ID);
-            Assert.AreEqual(true, ValidProduct);
+            bool ValidProduct = thisMachine.SelectProduct(COLA.ID);
+            Assert.IsTrue(ValidProduct);
         }
         [TestMethod]
         public void SelectProduct_Chips_ChangeWithNoQuarters()
@@ -208,8 +225,8 @@ namespace VendingMachineTest
             {
                 thisMachine.CheckCoinValue(VendingMachine.DIME.Item1, VendingMachine.DIME.Item2);
             }
-            bool ValidProduct = thisMachine.SelectProduct(VendingMachine.CHIPS.ID);
-            Assert.AreEqual(true, ValidProduct);
+            bool ValidProduct = thisMachine.SelectProduct(CHIPS.ID);
+            Assert.IsTrue(ValidProduct);
         }
         [TestMethod]
         public void SelectProduct_Candy_ChangeWithNoQuarters()
@@ -219,8 +236,8 @@ namespace VendingMachineTest
             {
                 thisMachine.CheckCoinValue(VendingMachine.NICKEL.Item1, VendingMachine.NICKEL.Item2);
             }
-            bool ValidProduct = thisMachine.SelectProduct(VendingMachine.CANDY.ID);
-            Assert.AreEqual(true, ValidProduct);
+            bool ValidProduct = thisMachine.SelectProduct(CANDY.ID);
+            Assert.IsTrue(ValidProduct);
         }
         [TestMethod]
         public void SelectProduct_SoldOut()
@@ -232,26 +249,27 @@ namespace VendingMachineTest
                 {
                     thisMachine.CheckCoinValue(VendingMachine.QUARTER.Item1, VendingMachine.QUARTER.Item2);
                 }
-                ValidProduct = thisMachine.SelectProduct(VendingMachine.COLA.ID);
+                ValidProduct = thisMachine.SelectProduct(COLA.ID);
             }
-            Assert.AreEqual(false, ValidProduct);
+            Assert.IsFalse(ValidProduct);
         }
         [TestMethod]
         public void SelectProduct_NotEnoughMoney()
         {
-            bool ValidProduct = thisMachine.SelectProduct(VendingMachine.CANDY.ID);
-            Assert.AreEqual(false, ValidProduct);
+            bool ValidProduct = thisMachine.SelectProduct(CANDY.ID);
+            Assert.IsFalse(ValidProduct);
         }
         [TestMethod]
         public void SelectProduct_UnableToMakeChange()
         {
-            bool ValidProduct = thisMachine.SelectProduct(VendingMachine.CANDY.ID);
-            Assert.AreEqual(false, ValidProduct);
+            bool ValidProduct = thisMachine.SelectProduct(CANDY.ID);
+            Assert.IsFalse(ValidProduct);
         }
 
 
-
-
+        //////////////////////////////////
+        //        Check Messages        //
+        //////////////////////////////////
         [TestMethod]
         public void SelectProduct_Cola_ExactAmount_CheckMessage()
         {
@@ -260,7 +278,7 @@ namespace VendingMachineTest
             thisMachine.CheckCoinValue(VendingMachine.QUARTER.Item1, VendingMachine.QUARTER.Item2);
             thisMachine.CheckCoinValue(VendingMachine.QUARTER.Item1, VendingMachine.QUARTER.Item2);
             thisMachine.CheckCoinValue(VendingMachine.QUARTER.Item1, VendingMachine.QUARTER.Item2);
-            bool ValidProduct = thisMachine.SelectProduct(VendingMachine.COLA.ID);
+            bool ValidProduct = thisMachine.SelectProduct(COLA.ID);
             Assert.AreEqual(thisMachine.ScreenDisplay(), VendingMachine.THANKYOUMESSAGE);
         }
         [TestMethod]
@@ -269,7 +287,7 @@ namespace VendingMachineTest
             // Chips price is 50 cents
             thisMachine.CheckCoinValue(VendingMachine.QUARTER.Item1, VendingMachine.QUARTER.Item2);
             thisMachine.CheckCoinValue(VendingMachine.QUARTER.Item1, VendingMachine.QUARTER.Item2);
-            bool ValidProduct = thisMachine.SelectProduct(VendingMachine.CHIPS.ID);
+            bool ValidProduct = thisMachine.SelectProduct(CHIPS.ID);
             Assert.AreEqual(thisMachine.ScreenDisplay(), VendingMachine.THANKYOUMESSAGE);
         }
         [TestMethod]
@@ -280,7 +298,7 @@ namespace VendingMachineTest
             thisMachine.CheckCoinValue(VendingMachine.QUARTER.Item1, VendingMachine.QUARTER.Item2);
             thisMachine.CheckCoinValue(VendingMachine.DIME.Item1, VendingMachine.DIME.Item2);
             thisMachine.CheckCoinValue(VendingMachine.NICKEL.Item1, VendingMachine.NICKEL.Item2);
-            bool ValidProduct = thisMachine.SelectProduct(VendingMachine.CANDY.ID);
+            bool ValidProduct = thisMachine.SelectProduct(CANDY.ID);
             Assert.AreEqual(thisMachine.ScreenDisplay(), VendingMachine.THANKYOUMESSAGE);
         }
         [TestMethod]
@@ -288,7 +306,7 @@ namespace VendingMachineTest
         {
             // Cola is a dollar
             thisMachine.CheckCoinValue(VendingMachine.QUARTER.Item1, VendingMachine.QUARTER.Item2);
-            bool ValidProduct = thisMachine.SelectProduct(VendingMachine.COLA.ID);
+            bool ValidProduct = thisMachine.SelectProduct(COLA.ID);
             Assert.AreEqual(thisMachine.ScreenDisplay(), VendingMachine.INSERTCOINMESSAGE);
         }
         [TestMethod]
@@ -296,7 +314,7 @@ namespace VendingMachineTest
         {
             // Chips price is 50 cents
             thisMachine.CheckCoinValue(VendingMachine.QUARTER.Item1, VendingMachine.QUARTER.Item2);
-            bool ValidProduct = thisMachine.SelectProduct(VendingMachine.CHIPS.ID);
+            bool ValidProduct = thisMachine.SelectProduct(CHIPS.ID);
             Assert.AreEqual(thisMachine.ScreenDisplay(), VendingMachine.INSERTCOINMESSAGE);
         }
         [TestMethod]
@@ -304,7 +322,7 @@ namespace VendingMachineTest
         {
             // Candy Price is 65 cents
             thisMachine.CheckCoinValue(VendingMachine.NICKEL.Item1, VendingMachine.NICKEL.Item2);
-            bool ValidProduct = thisMachine.SelectProduct(VendingMachine.CANDY.ID);
+            bool ValidProduct = thisMachine.SelectProduct(CANDY.ID);
             Assert.AreEqual(thisMachine.ScreenDisplay(), VendingMachine.INSERTCOINMESSAGE);
         }
         [TestMethod]
@@ -315,7 +333,7 @@ namespace VendingMachineTest
             {
                 thisMachine.CheckCoinValue(VendingMachine.DIME.Item1, VendingMachine.DIME.Item2);
             }
-            bool ValidProduct = thisMachine.SelectProduct(VendingMachine.COLA.ID);
+            bool ValidProduct = thisMachine.SelectProduct(COLA.ID);
             Assert.AreEqual(thisMachine.ScreenDisplay(), VendingMachine.THANKYOUMESSAGE);
         }
         [TestMethod]
@@ -326,7 +344,7 @@ namespace VendingMachineTest
             {
                 thisMachine.CheckCoinValue(VendingMachine.DIME.Item1, VendingMachine.DIME.Item2);
             }
-            bool ValidProduct = thisMachine.SelectProduct(VendingMachine.CHIPS.ID);
+            bool ValidProduct = thisMachine.SelectProduct(CHIPS.ID);
             Assert.AreEqual(thisMachine.ScreenDisplay(), VendingMachine.THANKYOUMESSAGE);
         }
         [TestMethod]
@@ -337,7 +355,7 @@ namespace VendingMachineTest
             {
                 thisMachine.CheckCoinValue(VendingMachine.NICKEL.Item1, VendingMachine.NICKEL.Item2);
             }
-            bool ValidProduct = thisMachine.SelectProduct(VendingMachine.CANDY.ID);
+            bool ValidProduct = thisMachine.SelectProduct(CANDY.ID);
             Assert.AreEqual(thisMachine.ScreenDisplay(), VendingMachine.THANKYOUMESSAGE);
         }
         [TestMethod]
@@ -350,14 +368,14 @@ namespace VendingMachineTest
                 {
                     thisMachine.CheckCoinValue(VendingMachine.QUARTER.Item1, VendingMachine.QUARTER.Item2);
                 }
-                ValidProduct = thisMachine.SelectProduct(VendingMachine.COLA.ID);
+                ValidProduct = thisMachine.SelectProduct(COLA.ID);
             }
             Assert.AreEqual(thisMachine.ScreenDisplay(), VendingMachine.SOLDOUTMESSAGE);
         }
         [TestMethod]
         public void SelectProduct_NotEnoughMoney_CheckMessage()
         {
-            bool ValidProduct = thisMachine.SelectProduct(VendingMachine.CANDY.ID);
+            bool ValidProduct = thisMachine.SelectProduct(CANDY.ID);
             Assert.AreEqual(thisMachine.ScreenDisplay(), VendingMachine.INSERTCOINMESSAGE);
         }
         [TestMethod]
@@ -367,7 +385,7 @@ namespace VendingMachineTest
             {
                 thisMachine.CheckCoinValue(VendingMachine.QUARTER.Item1, VendingMachine.QUARTER.Item2);
             }
-            bool ValidProduct = thisMachine.SelectProduct(VendingMachine.CANDY.ID);
+            bool ValidProduct = thisMachine.SelectProduct(CANDY.ID);
             Assert.AreEqual(thisMachine.ScreenDisplay(), VendingMachine.EXACTCHANGEONLYMESSAGE);
         }
 

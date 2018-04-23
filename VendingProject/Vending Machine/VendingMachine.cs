@@ -7,7 +7,7 @@ namespace Vending_Machine
     public class VendingMachine
     {
         /// <summary>
-        /// The following Tuple values are the diameter and weight of known coins, stored respectively.
+        /// The following Tuple values are the diameter (cm) and weight (g) of known coins, stored respectively.
         /// </summary>
         public static readonly Tuple<double, double> PENNY = new Tuple<double, double>(19, 2.5);
         public static readonly Tuple<double, double> NICKEL = new Tuple<double, double>(21.2, 5);
@@ -23,28 +23,15 @@ namespace Vending_Machine
         public static readonly string INSERTCOINMESSAGE = "INSERT COIN";
         public static readonly string SOLDOUTMESSAGE = "SOLD OUT";
         public static readonly string EXACTCHANGEONLYMESSAGE = "EXACT CHANGE ONLY";
+        
 
 
-        public static Product COLA = new Product("Cola", 100, 1);
-        public static Product CHIPS = new Product("Chips", 50, 2);
-        public static Product CANDY = new Product("Candy", 65, 3);
-
-        public static Dictionary<int, Product> ProductDictionary = new Dictionary<int, Product>()
-        {
-            {1,  new Product("Cola", 100, 1) },
-            {2, new Product("Chips", 50, 2) },
-            {3, new Product("Candy", 65, 3) }
-        };
+        private Dictionary<int, Product> productDictionary = new Dictionary<int, Product>();
 
         /// <summary>
         /// Tracks the stock of a given item.
         /// </summary>
-        public Dictionary<int, int> PRODUCTSTOCK = new Dictionary<int, int>()
-        {
-            {1, 10 },
-            {2, 10 },
-            {3, 10 }
-        };
+        private Dictionary<int, int> productStock = new Dictionary<int, int>();
 
 
         /// <summary>
@@ -60,6 +47,24 @@ namespace Vending_Machine
         public int InsertedAmount = 0;
         private string screenMessage;
 
+        public VendingMachine(Dictionary<int, Product> newProductDictionary, Dictionary<int, int> newProductStockDictionary)
+        {
+            productDictionary = newProductDictionary;
+            
+            if (newProductStockDictionary == null || newProductStockDictionary.Count == 0)
+            {
+                productStock = new Dictionary<int, int>();
+                foreach(var product in productDictionary)
+                {
+                    productStock.Add(product.Key, 0);
+                }
+            }
+            else
+            {
+                productStock = newProductStockDictionary;
+            }
+        }
+
         /// <summary>
         /// Determines coin validity based on diameter and weight.
         /// </summary>
@@ -68,14 +73,7 @@ namespace Vending_Machine
         /// <returns>T/F for whether the coin is acceptable.</returns>
         public bool CheckCoinToAccept(double diameter, double weight)
         {
-            if (COINDICTIONARY.ContainsKey(new Tuple<double, double>(diameter, weight)))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return COINDICTIONARY.ContainsKey(new Tuple<double, double>(diameter, weight));
         }
 
         ///// <summary>
@@ -136,9 +134,9 @@ namespace Vending_Machine
         /// <returns>T/F for whether the product is valid.</returns>
         public bool SelectProduct(int productid)
         {
-            if (PRODUCTSTOCK[productid] > 0)
+            if (productStock[productid] > 0)
             {
-                Product thisProduct = ProductDictionary[productid];
+                Product thisProduct = productDictionary[productid];
 
                 // Check if enough money has been inserted for item.
                 if (thisProduct.Price > InsertedAmount)
@@ -157,7 +155,7 @@ namespace Vending_Machine
                 }
 
                 // Before returning true, subtract from the inventory level of the product.
-                PRODUCTSTOCK[productid]--;
+                productStock[productid]--;
                 screenMessage = THANKYOUMESSAGE;
                 return true;
             }
@@ -189,7 +187,7 @@ namespace Vending_Machine
                 }
             }
 
-            if (changeDictionary[25] > CoinCollection[25] || changeDictionary[10] > CoinCollection[10] || changeDictionary[5] > CoinCollection[5] || change > 0)
+            if (change > 0)
             {
                 // TODO Dispense Change
                 return false;
