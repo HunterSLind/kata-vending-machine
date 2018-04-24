@@ -24,12 +24,12 @@ namespace Vending_Machine
         public static readonly string SOLDOUTMESSAGE = "SOLD OUT";
         public static readonly string EXACTCHANGEONLYMESSAGE = "EXACT CHANGE ONLY";
 
-        private Dictionary<int, Product> productDictionary = new Dictionary<int, Product>();
+        private Dictionary<int, Product> productDictionary;
 
         /// <summary>
         /// Tracks the stock of a given item.
         /// </summary>
-        private Dictionary<int, int> productStock = new Dictionary<int, int>();
+        private Dictionary<int, int> productStock;
 
         /// <summary>
         /// Coin storage counts. Key is the value of the coin, Value is the number of coins in the machine.
@@ -151,6 +151,8 @@ namespace Vending_Machine
 
                 // Before returning true, subtract from the inventory level of the product.
                 productStock[productid]--;
+                // also change the inserted amount to 0.00
+                InsertedAmount = 0;
                 screenMessage = THANKYOUMESSAGE;
                 return true;
             }
@@ -163,12 +165,10 @@ namespace Vending_Machine
 
         public void EmptyChangeDictionary()
         {
-            changeDictionary = new Dictionary<int, int>()
+            foreach(var item in changeDictionary.Keys)
             {
-                {25, 0 },
-                {10, 0 },
-                {5, 0 }
-            };
+                changeDictionary[item] = 0;
+            }
         }
 
         private bool ableToMakeChange(int change)
@@ -182,8 +182,8 @@ namespace Vending_Machine
             {
                 while (change >= item.Key && changeDictionary[item.Key] < CoinCollection[item.Key])
                 {
-                    changeDictionary[item.Key] = changeDictionary[item.Key] + 1;
-                    change = change - item.Key;
+                    changeDictionary[item.Key] += 1;
+                    change -= item.Key;
                 }
             }
 
@@ -193,6 +193,15 @@ namespace Vending_Machine
                 return false;
             }
             return true;
+        }
+
+        /// <summary>
+        /// Returns coins to dispense
+        /// </summary>
+        /// <returns></returns>
+        public Dictionary<int, int> DispenseChange()
+        {
+            return new Dictionary<int, int>();
         }
     }
 }

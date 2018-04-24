@@ -364,7 +364,7 @@ namespace VendingMachineTest
             bool ValidProduct = true;
             while (ValidProduct == true)
             {
-                for(int i = 0; i <= 4; i++)
+                for(int i = 0; i < 4; i++)
                 {
                     thisMachine.CheckCoinValue(VendingMachine.QUARTER.Item1, VendingMachine.QUARTER.Item2);
                 }
@@ -388,8 +388,38 @@ namespace VendingMachineTest
             bool ValidProduct = thisMachine.SelectProduct(CANDY.ID);
             Assert.AreEqual(thisMachine.ScreenDisplay(), VendingMachine.EXACTCHANGEONLYMESSAGE);
         }
+        
+        [TestMethod]
+        public void DispenseChange_NoPurchase()
+        {
+            for (int i = 0; i <= 4; i++)
+            {
+                thisMachine.CheckCoinValue(VendingMachine.QUARTER.Item1, VendingMachine.QUARTER.Item2);
+            }
+            var machineChangeDictionary = thisMachine.DispenseChange();
+            var compareDictionary = new Dictionary<int, int>()
+            {
+                {25, 4 },
+                {10, 0 },
+                {5, 0 }
+            };
+            foreach(var key in machineChangeDictionary.Keys)
+            {
+                Assert.AreEqual(compareDictionary[key], machineChangeDictionary[key]);
+            }
+        }
 
+        [TestMethod]
+        public void DispenseChange_Zero()
+        {
 
+        }
+
+        [TestMethod]
+        public void DispenseChange_Purchase()
+        {
+
+        }
 
 
     }
