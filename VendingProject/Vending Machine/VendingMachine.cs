@@ -201,7 +201,9 @@ namespace Vending_Machine
         /// <returns></returns>
         public Dictionary<int, int> DispenseChange()
         {
-            return new Dictionary<int, int>();
+            ableToMakeChange(InsertedAmount);
+            return changeDictionary;
+            
         }
     }
 }

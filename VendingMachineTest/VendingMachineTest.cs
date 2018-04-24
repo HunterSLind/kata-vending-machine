@@ -392,7 +392,7 @@ namespace VendingMachineTest
         [TestMethod]
         public void DispenseChange_NoPurchase()
         {
-            for (int i = 0; i <= 4; i++)
+            for (int i = 0; i < 4; i++)
             {
                 thisMachine.CheckCoinValue(VendingMachine.QUARTER.Item1, VendingMachine.QUARTER.Item2);
             }
@@ -412,13 +412,38 @@ namespace VendingMachineTest
         [TestMethod]
         public void DispenseChange_Zero()
         {
-
+            var machineChangeDictionary = thisMachine.DispenseChange();
+            var compareDictionary = new Dictionary<int, int>()
+            {
+                {25, 0 },
+                {10, 0 },
+                {5, 0 }
+            };
+            foreach (var key in machineChangeDictionary.Keys)
+            {
+                Assert.AreEqual(compareDictionary[key], machineChangeDictionary[key]);
+            }
         }
 
         [TestMethod]
         public void DispenseChange_Purchase()
         {
-
+            for (int i = 0; i <= 4; i++)
+            {
+                thisMachine.CheckCoinValue(VendingMachine.QUARTER.Item1, VendingMachine.QUARTER.Item2);
+            }
+            thisMachine.SelectProduct(COLA.ID);
+            var machineChangeDictionary = thisMachine.changeDictionary;
+            var compareDictionary = new Dictionary<int, int>()
+            {
+                {25, 1 },
+                {10, 0 },
+                {5, 0 }
+            };
+            foreach (var key in machineChangeDictionary.Keys)
+            {
+                Assert.AreEqual(compareDictionary[key], machineChangeDictionary[key]);
+            }
         }
 
 
